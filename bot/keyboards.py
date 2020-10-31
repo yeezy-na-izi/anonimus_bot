@@ -2,7 +2,7 @@ import telebot
 
 main_keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
 main_keyboard.row('👤 Профиль', '😜 Найти собеседника')
-main_keyboard.row('❔ Помощь')
+main_keyboard.row('❔ Помощь', '🛠 Error')
 
 profile_keyboard = telebot.types.ReplyKeyboardMarkup(True, True)
 profile_keyboard.row('✏ Изменить профиль', '🔄 Заново заполнить профиль')

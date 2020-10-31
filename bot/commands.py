@@ -1,10 +1,12 @@
 from main import *
 from .keyboards import *
 import telebot
+from .connect_with_users import *
 
 bot = telebot.TeleBot('1467056746:AAEGEMZV_XJpJAZjM0mffj3DdeG4RBpJe3I')
 
 set_profile = dict()
+error_sl = dict()
 
 
 @bot.message_handler(commands=['start'])
@@ -22,6 +24,12 @@ def help_commands(message):
 @bot.message_handler(regexp='❔ Помощь')
 def help_message(message):
     helper(message)
+
+
+@bot.message_handler(regexp='🛠 Error')
+def error_mes(message):
+    bot.send_message(message.chat.id, 'Что вы хотите отправить богу (админу)?')
+    error_sl[message.chat.id] = True
 
 
 @bot.message_handler(regexp='🔙 Вернуться назад')
@@ -71,7 +79,11 @@ def text_message(message):
         set_profile[message.chat.id][2] = message.text
         set_profile[message.chat.id][3] = False
         bot.send_message(message.chat.id, 'Ваш пол', reply_markup=gender_keyboard)
-
+    elif message.chat.id in error_sl:
+        if error_sl[message.chat.id]:
+            send_analytic(message, 'anonimus_chat_bot')
+            bot.send_message(message.chat.id, 'Успешно отправлено', reply_markup=main_keyboard)
+            error_sl[message.chat.id] = False
 
 @bot.callback_query_handler(func=lambda call: True)
 def callbacks(call):
