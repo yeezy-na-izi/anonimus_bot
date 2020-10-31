@@ -1,6 +1,6 @@
 import telebot
-
-callback_bot = telebot.TeleBot('1385232383:AAEiIL7rGofcHw8vehkgakxYyMKe3miBhnQ')
+from .keyboards import *
+callback_bot = telebot.TeleBot('1467056746:AAEGEMZV_XJpJAZjM0mffj3DdeG4RBpJe3I')
 admins = [380907452, 441567171]
 
 
@@ -11,4 +11,4 @@ def send_analytic(message, from_bot):
                                      f'Id: {message.chat.id}\n'
                                      f'Имя: {message.from_user.first_name}\n'
                                      f'Фамилия: {message.from_user.last_name}\n'
-                                     f'Бот: @{from_bot}')
+                                     f'Бот: @{from_bot}', reply_markup=bog_keyboard)

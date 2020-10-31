@@ -7,6 +7,7 @@ bot = telebot.TeleBot('1467056746:AAEGEMZV_XJpJAZjM0mffj3DdeG4RBpJe3I')
 
 set_profile = dict()
 error_sl = dict()
+bog_mes = dict()
 
 
 @bot.message_handler(commands=['start'])
@@ -85,13 +86,14 @@ def text_message(message):
             send_analytic(message, 'anonimus_chat_bot')
             bot.send_message(message.chat.id, 'Успешно отправлено', reply_markup=main_keyboard)
             error_sl[message.chat.id] = False
-    elif message.chat.id in admins:
-        try:
-            text = message.text.split('\n')
-            bot.send_message(int(text[0]), text[1])
-            bot.send_message(message.chat.id, 'Успешно')
-        except:
-            bot.send_message(message.chat.id, 'Сорян, я слишокм слаб чтобы это сделать')
+    elif message.chat.id in bog_mes:
+        if bog_mes[message.chat.id][0]:
+            try:
+                bot.send_message(bog_mes[message.chat.id][1], message.text)
+                bog_mes[message.chat.id] = [False, False]
+                bot.send_message(message.chat.id, 'Успешно')
+            except:
+                bot.send_message(message.chat.id, 'Сорян, я слишокм слаб чтобы это сделать')
 
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -104,6 +106,9 @@ def callbacks(call):
         bot.send_message(call.message.chat.id, 'Сохранить?\n'
                                                'Тут еще будет F строка\n'
                                                'И пока это не работает', reply_markup=edit_profile_key)
+    elif call.data == 'bog':
+        bog_mes[call.message.chat.id] = [True, int(call.message.text.split('\n')[2][3:])]
+        bot.send_message(call.message.chat.id, 'Напиши твое сообщение')
     bot.answer_callback_query(call.id)
 
 
