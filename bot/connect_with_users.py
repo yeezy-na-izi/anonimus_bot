@@ -1,6 +1,6 @@
 import telebot
 
-callback_bot = telebot.TeleBot('1467056746:AAEGEMZV_XJpJAZjM0mffj3DdeG4RBpJe3I')
+callback_bot = telebot.TeleBot('1385232383:AAEiIL7rGofcHw8vehkgakxYyMKe3miBhnQ')
 admins = [380907452, 441567171]
 
 
