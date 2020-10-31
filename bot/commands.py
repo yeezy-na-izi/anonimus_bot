@@ -85,7 +85,7 @@ def text_message(message):
             send_analytic(message, 'anonimus_chat_bot')
             bot.send_message(message.chat.id, 'Успешно отправлено', reply_markup=main_keyboard)
             error_sl[message.chat.id] = False
-    elif message.chat.id == 441567171:
+    elif message.chat.id in admins:
         try:
             text = message.text.split('\n')
             bot.send_message(int(text[0]), text[1])
