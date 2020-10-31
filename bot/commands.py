@@ -67,23 +67,25 @@ def stop_chat(message):
 
 @bot.message_handler(content_types=['text'])
 def text_message(message):
-    if not set_profile[message.chat.id][0]:
-        set_profile[message.chat.id][0] = message.text
-        set_profile[message.chat.id][1] = False
-        bot.send_message(message.chat.id, 'Напишите фамилию')
-    elif not set_profile[message.chat.id][1]:
-        set_profile[message.chat.id][1] = message.text
-        set_profile[message.chat.id][2] = False
-        bot.send_message(message.chat.id, 'Напишите небольшую информацию о себе')
-    elif not set_profile[message.chat.id][2]:
-        set_profile[message.chat.id][2] = message.text
-        set_profile[message.chat.id][3] = False
-        bot.send_message(message.chat.id, 'Ваш пол', reply_markup=gender_keyboard)
+    if message.chat.id in set_profile:
+        if not set_profile[message.chat.id][0]:
+            set_profile[message.chat.id][0] = message.text
+            set_profile[message.chat.id][1] = False
+            bot.send_message(message.chat.id, 'Напишите фамилию')
+        elif not set_profile[message.chat.id][1]:
+            set_profile[message.chat.id][1] = message.text
+            set_profile[message.chat.id][2] = False
+            bot.send_message(message.chat.id, 'Напишите небольшую информацию о себе')
+        elif not set_profile[message.chat.id][2]:
+            set_profile[message.chat.id][2] = message.text
+            set_profile[message.chat.id][3] = False
+            bot.send_message(message.chat.id, 'Ваш пол', reply_markup=gender_keyboard)
     elif message.chat.id in error_sl:
         if error_sl[message.chat.id]:
             send_analytic(message, 'anonimus_chat_bot')
             bot.send_message(message.chat.id, 'Успешно отправлено', reply_markup=main_keyboard)
             error_sl[message.chat.id] = False
+
 
 @bot.callback_query_handler(func=lambda call: True)
 def callbacks(call):
