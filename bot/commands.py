@@ -38,7 +38,7 @@ def profile_message(message):
 @bot.message_handler(regexp='🔄 Заново заполнить профиль')
 def save_profile(message):
     bot.send_message(message.chat.id, 'Напиши свое имя')
-    set_profile[message.chat.id] = [True, False, False, False]
+    set_profile[message.chat.id] = [False, True, True, True]
 
 
 # chat commands
@@ -59,17 +59,17 @@ def stop_chat(message):
 
 @bot.message_handler(content_types=['text'])
 def text_message(message):
-    if set_profile[message.chat.id][0] == True:
+    if not set_profile[message.chat.id][0]:
         set_profile[message.chat.id][0] = message.text
-        set_profile[message.chat.id][1] = True
+        set_profile[message.chat.id][1] = False
         bot.send_message(message.chat.id, 'Напишите фамилию')
-    elif set_profile[message.chat.id][1] == True:
+    elif not set_profile[message.chat.id][1]:
         set_profile[message.chat.id][1] = message.text
-        set_profile[message.chat.id][2] = True
+        set_profile[message.chat.id][2] = False
         bot.send_message(message.chat.id, 'Напишите небольшую информацию о себе')
-    elif set_profile[message.chat.id][2] == True:
+    elif not set_profile[message.chat.id][2]:
         set_profile[message.chat.id][2] = message.text
-        set_profile[message.chat.id][3] = True
+        set_profile[message.chat.id][3] = False
         bot.send_message(message.chat.id, 'Ваш пол', reply_markup=gender_keyboard)
 
 
