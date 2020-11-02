@@ -9,7 +9,7 @@ def data_add_users(user, id):
        surname TEXT,
        about_user TEXT,
        gender BLOB,
-       chat_id REAL,
+       chat_id INTEGER,
        looking_for BLOB);
     """)
     conn.commit()
