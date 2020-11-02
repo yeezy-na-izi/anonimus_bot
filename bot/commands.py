@@ -42,7 +42,15 @@ def go_back(message):
 # profile commands
 @bot.message_handler(regexp='👤 Профиль')
 def profile_message(message):
-    bot.send_message(message.chat.id, 'Ну, твой профиль', reply_markup=profile_keyboard)
+    z = prof_show(message.chat.id)
+    if len(z) > 0:
+        bot.send_message(message.chat.id, f'Ваш профиль:\n'
+                                          f'Ваше имя: {z[0]}\n'
+                                          f'Ваша фамилия: {z[1]}\n'
+                                          f'Информация о себе: {z[2]}\n'
+                                          f'Ваш пол: {"Мужской" if z[3] == "True" else "Женский"}', reply_markup=profile_keyboard)
+    else:
+        bot.send_message(message.chat.id, 'Вы еще не заполнили свой профиль', reply_markup=profile_keyboard)
 
 
 @bot.message_handler(regexp='🔄 Заново заполнить профиль')
@@ -71,17 +79,30 @@ def stop_chat(message):
 def text_message(message):
     if message.chat.id in set_profile:
         if not set_profile[message.chat.id][0]:
-            set_profile[message.chat.id][0] = message.text
-            set_profile[message.chat.id][1] = False
-            bot.send_message(message.chat.id, 'Напишите фамилию')
+            if message.text.count(' ') == 0:
+                set_profile[message.chat.id][0] = message.text
+                set_profile[message.chat.id][1] = False
+                bot.send_message(message.chat.id, 'Напишите фамилию')
+            else:
+                bot.send_message(message.chat.id, 'Извините, имя одним словом')
+                save_profile(message)
         elif not set_profile[message.chat.id][1]:
-            set_profile[message.chat.id][1] = message.text
-            set_profile[message.chat.id][2] = False
-            bot.send_message(message.chat.id, 'Напишите небольшую информацию о себе')
+            if message.text.count(' ') == 0:
+                set_profile[message.chat.id][1] = message.text
+                set_profile[message.chat.id][2] = False
+                bot.send_message(message.chat.id, 'Напишите небольшую информацию о себе (менее 1000 символов)')
+            else:
+                bot.send_message(message.chat.id, 'Фамилию одним словом, извините')
+                bot.send_message(message.chat.id, 'Напишите фамилию')
         elif not set_profile[message.chat.id][2]:
-            set_profile[message.chat.id][2] = message.text
-            set_profile[message.chat.id][3] = False
-            bot.send_message(message.chat.id, 'Ваш пол', reply_markup=gender_keyboard)
+            if len(message.text) < 1000:
+                set_profile[message.chat.id][2] = message.text
+                set_profile[message.chat.id][3] = False
+                bot.send_message(message.chat.id, 'Ваш пол', reply_markup=gender_keyboard)
+            else:
+                bot.send_message(message.chat.id,
+                                 'Я СКАЗАЛ НЕ БОЛЕЕ 1000 СИМВОЛОВ, ТЕБЕ НА КИТАЙСКОМ НАПИСАТЬ? НА:千 文字以下 ТАК ПОНЯТНО, СУКА?')
+                bot.send_message(message.chat.id, 'Напиши нормально, дура')
     if message.chat.id in error_sl:
         if error_sl[message.chat.id]:
             send_analytic(message, 'anonimus_chat_bot')
