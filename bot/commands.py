@@ -45,11 +45,11 @@ def profile_message(message):
     z = prof_show(message.chat.id)
     if len(z) > 0:
         bot.send_message(message.chat.id, f'Ваш профиль:\n'
-                                          f'Ваше имя: {z[0]}\n'
-                                          f'Ваша фамилия: {z[1]}\n'
-                                          f'Информация о себе: {z[2]}\n'
+                                          f'Ваше имя: ```{z[0]}```\n'
+                                          f'Ваша фамилия: ```{z[1]}```\n'
+                                          f'Информация о себе: ```{z[2]}```\n'
                                           f'Ваш пол: {"Мужской" if z[3] == "True" else "Женский"}',
-                         reply_markup=profile_keyboard)
+                         reply_markup=profile_keyboard, parse_mode="Markdown")
     else:
         bot.send_message(message.chat.id, 'Вы еще не заполнили свой профиль', reply_markup=profile_keyboard)
 
@@ -134,12 +134,12 @@ def callbacks(call):
             set_profile[call.message.chat.id][3] = False
         bot.delete_message(call.message.chat.id, call.message.message_id)
         bot.send_message(call.message.chat.id, f'Сохранить?\n'
-                                               f'Ваше имя: {set_profile[call.message.chat.id][0]}\n'
-                                               f'Ваша фамилия: {set_profile[call.message.chat.id][1]}\n'
-                                               f'Информация о себе: {set_profile[call.message.chat.id][2]}\n'
+                                               f'Ваше имя: ```{set_profile[call.message.chat.id][0]}```\n'
+                                               f'Ваша фамилия: ```{set_profile[call.message.chat.id][1]}```\n'
+                                               f'Информация о себе: ```{set_profile[call.message.chat.id][2]}```\n'
                                                f'Ваш пол: '
                                                f'{"Мужской" if set_profile[call.message.chat.id][3] else "Женский"}',
-                         reply_markup=edit_profile_key)
+                         reply_markup=edit_profile_key, parse_mode="Markdown")
     elif call.data == 'bog':
         bog_mes[call.message.chat.id] = [True, int(call.message.text.split('\n')[2][3:])]
         bot.send_message(call.message.chat.id, 'Напиши твое сообщение')
