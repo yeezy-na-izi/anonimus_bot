@@ -107,9 +107,10 @@ def callbacks(call):
         bot.send_message(call.message.chat.id, f'Сохранить?\n'
                                                f'Ваше имя: {set_profile[call.message.chat.id][0]}\n'
                                                f'Ваша фамилия: {set_profile[call.message.chat.id][1]}\n'
-                                               f'=Информация о себе=: {set_profile[call.message.chat.id][2]}\n'
-                                               f'Ваш пол: {"Мужской" if set_profile[call.message.chat.id][3] else "Женский"}__\n'
-                                               f'И пока это не работает', reply_markup=edit_profile_key)
+                                               f'Информация о себе: {set_profile[call.message.chat.id][2]}\n'
+                                               f'Ваш пол: '
+                                               f'{"Мужской" if set_profile[call.message.chat.id][3] else "Женский"}',
+                         reply_markup=edit_profile_key)
     elif call.data == 'bog':
         bog_mes[call.message.chat.id] = [True, int(call.message.text.split('\n')[2][3:])]
         bot.send_message(call.message.chat.id, 'Напиши твое сообщение')
@@ -120,7 +121,6 @@ def callbacks(call):
         else:
             bot.send_message(call.message.chat.id, 'Вы хотите перезаполнить форму?')
     bot.answer_callback_query(call.id)
-
 
 
 # main def
