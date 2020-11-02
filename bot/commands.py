@@ -48,7 +48,8 @@ def profile_message(message):
                                           f'Ваше имя: {z[0]}\n'
                                           f'Ваша фамилия: {z[1]}\n'
                                           f'Информация о себе: {z[2]}\n'
-                                          f'Ваш пол: {"Мужской" if z[3] == "True" else "Женский"}', reply_markup=profile_keyboard)
+                                          f'Ваш пол: {"Мужской" if z[3] == "True" else "Женский"}',
+                         reply_markup=profile_keyboard)
     else:
         bot.send_message(message.chat.id, 'Вы еще не заполнили свой профиль', reply_markup=profile_keyboard)
 
@@ -82,6 +83,8 @@ def text_message(message):
             if message.text.count(' ') == 0:
                 set_profile[message.chat.id][0] = message.text
                 set_profile[message.chat.id][1] = False
+                bot.delete_message(message.chat.id, message.message_id - 1)
+                bot.delete_message(message.chat.id, message.message_id)
                 bot.send_message(message.chat.id, 'Напишите фамилию')
             else:
                 bot.send_message(message.chat.id, 'Извините, имя одним словом')
@@ -89,6 +92,8 @@ def text_message(message):
         elif not set_profile[message.chat.id][1]:
             if message.text.count(' ') == 0:
                 set_profile[message.chat.id][1] = message.text
+                bot.delete_message(message.chat.id, message.message_id - 1)
+                bot.delete_message(message.chat.id, message.message_id)
                 set_profile[message.chat.id][2] = False
                 bot.send_message(message.chat.id, 'Напишите небольшую информацию о себе (менее 1000 символов)')
             else:
@@ -97,6 +102,8 @@ def text_message(message):
         elif not set_profile[message.chat.id][2]:
             if len(message.text) < 1000:
                 set_profile[message.chat.id][2] = message.text
+                bot.delete_message(message.chat.id, message.message_id - 1)
+                bot.delete_message(message.chat.id, message.message_id)
                 set_profile[message.chat.id][3] = False
                 bot.send_message(message.chat.id, 'Ваш пол', reply_markup=gender_keyboard)
             else:
@@ -125,6 +132,7 @@ def callbacks(call):
             set_profile[call.message.chat.id][3] = True
         else:
             set_profile[call.message.chat.id][3] = False
+        bot.delete_message(call.message.chat.id, call.message.message_id)
         bot.send_message(call.message.chat.id, f'Сохранить?\n'
                                                f'Ваше имя: {set_profile[call.message.chat.id][0]}\n'
                                                f'Ваша фамилия: {set_profile[call.message.chat.id][1]}\n'
@@ -138,6 +146,7 @@ def callbacks(call):
     elif 'prof' in call.data:
         if 'yes' in call.data:
             data_add_users(set_profile[call.message.chat.id], call.message.chat.id)
+            bot.delete_message(call.message.chat.id, call.message.message_id)
             bot.send_message(call.message.chat.id, "Сохранено...")
         else:
             bot.send_message(call.message.chat.id, 'Вы хотите перезаполнить форму?')
