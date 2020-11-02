@@ -13,9 +13,9 @@ bog_mes = dict()
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Это лучший анонимный чат бот в мире!\n'
-                                      'Напиши /help что бы узнать полный список возможностей бота!',
-                     reply_markup=main_keyboard)
+    bot.reply_to(message, 'Это лучший анонимный чат бот в мире!\n'
+                          'Напиши /help что бы узнать полный список возможностей бота!',
+                 reply_markup=main_keyboard)
 
 
 @bot.message_handler(commands=['help'])
@@ -108,8 +108,8 @@ def text_message(message):
                 set_profile[message.chat.id][3] = False
                 bot.send_message(message.chat.id, 'Ваш пол', reply_markup=gender_keyboard)
             else:
-                bot.send_message(message.chat.id,
-                                 'Я СКАЗАЛ НЕ БОЛЕЕ 1000 СИМВОЛОВ, ТЕБЕ НА КИТАЙСКОМ НАПИСАТЬ? НА:千 文字以下 ТАК ПОНЯТНО, СУКА?')
+                bot.send_message(message.chat.id, 'Я СКАЗАЛ НЕ БОЛЕЕ 1000 СИМВОЛОВ, ТЕБЕ НА КИТАЙСКОМ НАПИСАТЬ?'
+                                                  ' НА:千 文字以下 ТАК ПОНЯТНО, СУКА?')
                 bot.send_message(message.chat.id, 'Напиши нормально, дура')
     if message.chat.id in error_sl:
         if error_sl[message.chat.id]:
@@ -156,8 +156,8 @@ def callbacks(call):
 
 # main def
 def helper(message):
-    bot.send_message(message.chat.id, 'Тут какой-то помошник', reply_markup=main_keyboard)
+    bot.reply_to(message, 'Тут какой-то помошник', reply_markup=main_keyboard)
 
 
 def find_people(message):
-    bot.send_message(message.chat.id, 'Медленно ищу', reply_markup=chat_keyboard)
+    bot.reply_to(message.chat.id, 'Медленно ищу', reply_markup=chat_keyboard)
