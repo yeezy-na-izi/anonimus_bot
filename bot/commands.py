@@ -48,7 +48,8 @@ def profile_message(message):
                                           f'__Ваше имя:__ ```{z[0]}```\n'
                                           f'~Ваша фамилия:~ ```{z[1]}```\n'
                                           f'_Информация о себе_: `{z[2]}`\n'
-                                          f'Ваш пол: `{"Мужской" if z[3] == "True" else "Женский"}`',
+                                          f'Ваш пол: `{"Мужской" if z[3] == "True" else "Женский"}`\n'
+                                          f'[А тут я просто показываю как можно скрыть ссылку](google.com)',
                          reply_markup=profile_keyboard, parse_mode="MarkdownV2")
     else:
         bot.send_message(message.chat.id, 'Вы еще не заполнили свой профиль', reply_markup=profile_keyboard)
