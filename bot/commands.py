@@ -86,7 +86,7 @@ def text_message(message):
             send_analytic(message, 'anonimus_chat_bot')
             bot.send_message(message.chat.id, 'Успешно отправлено', reply_markup=main_keyboard)
             error_sl[message.chat.id] = False
-    elif message.chat.id in bog_mes:
+    if message.chat.id in bog_mes:
         if bog_mes[message.chat.id][0]:
             try:
                 bot.send_message(bog_mes[message.chat.id][1], message.text)
