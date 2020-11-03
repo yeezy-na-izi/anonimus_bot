@@ -160,4 +160,4 @@ def helper(message):
 
 
 def find_people(message):
-    bot.reply_to(message.chat.id, 'Медленно ищу', reply_markup=chat_keyboard)
+    bot.reply_to(message, 'Медленно ищу', reply_markup=chat_keyboard)
