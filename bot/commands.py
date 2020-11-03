@@ -3,6 +3,7 @@ from .keyboards import *
 import telebot
 from .connect_with_users import *
 from .DataBases import *
+import time
 
 bot = telebot.TeleBot('1467056746:AAEGEMZV_XJpJAZjM0mffj3DdeG4RBpJe3I')
 
@@ -45,17 +46,21 @@ def profile_message(message):
     z = prof_show(message.chat.id)
     if len(z) > 0:
         bot.send_message(message.chat.id, f'*Ваш профиль*\n'
-                                          f'__Ваше имя:__ ```{z[0]}```\n'
-                                          f'~Ваша фамилия:~ ```{z[1]}```\n'
-                                          f'_Информация о себе_: `{z[2]}`\n'
-                                          f'Ваш пол: `{"Мужской" if z[3] == "True" else "Женский"}`\n'
-                                          f'[А тут я просто показываю как можно скрыть ссылку](google.com)',
+                                          f'Ваше имя: {z[0]}\n'
+                                          f'Ваша фамилия: {z[1]}\n'
+                                          f'Информация о себе: {z[2]}\n'
+                                          f'Ваш пол: {"Мужской" if z[3] == "True" else "Женский"}\n',
                          reply_markup=profile_keyboard, parse_mode="MarkdownV2")
     else:
         bot.send_message(message.chat.id, 'Вы еще не заполнили свой профиль', reply_markup=profile_keyboard)
 
 
-@bot.message_handler(regexp='🔄 Заново заполнить профиль')
+@bot.message_handler(regexp='⚙ Настройки')
+def set_mes(message):
+    bot.send_message(message.chat.id, 'Тут настройки...', reply_markup=set_key)
+
+
+@bot.message_handler(regexp='🔄 Заполнить профиль')
 def save_profile(message):
     bot.send_message(message.chat.id, 'Напиши свое имя')
     set_profile[message.chat.id] = [False, True, True, True]
@@ -140,7 +145,7 @@ def callbacks(call):
                                                f'Информация о себе: ```{set_profile[call.message.chat.id][2]}```\n'
                                                f'Ваш пол: '
                                                f'{"Мужской" if set_profile[call.message.chat.id][3] else "Женский"}',
-                         reply_markup=edit_profile_key, parse_mode="Markdown")
+                         reply_markup=edit_profile_key, parse_mode="MarkdownV2")
     elif call.data == 'bog':
         bog_mes[call.message.chat.id] = [True, int(call.message.text.split('\n')[2][3:])]
         bot.send_message(call.message.chat.id, 'Напиши твое сообщение')
@@ -151,6 +156,13 @@ def callbacks(call):
             bot.send_message(call.message.chat.id, "Сохранено...")
         else:
             bot.send_message(call.message.chat.id, 'Вы хотите перезаполнить форму?')
+    elif 'sett' in call.data:
+        if 'back' in call.data:
+            bot.edit_message_text('...', call.message.chat.id, call.message.message_id)
+            time.sleep(0.5)
+            bot.delete_message(call.message.chat.id, call.message.message_id)
+            time.sleep(0.3)
+            bot.send_message(call.message.chat.id, 'Вы вернулись назад', reply_markup=profile_keyboard)
     bot.answer_callback_query(call.id)
 
 
