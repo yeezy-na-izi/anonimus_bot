@@ -10,14 +10,15 @@ def data_add_users(user, id):
        about_user TEXT,
        gender BLOB,
        chat_id INTEGER,
-       looking_for BLOB);
+       looking_for BLOB,
+       partner INTEGER);
     """)
     conn.commit()
     if prof_show(id):
         cur.execute(f"DELETE FROM user WHERE chat_id='{id}';")
         conn.commit()
-    cur.execute(f"INSERT INTO user(name, surname, about_user, gender, chat_id, looking_for) "
-                f"VALUES('{user[0]}','{user[1]}', '{user[2]}', '{user[3]}', '{id}', 'False');")
+    cur.execute(f"INSERT INTO user(name, surname, about_user, gender, chat_id, looking_for, partner) "
+                f"VALUES('{user[0]}','{user[1]}', '{user[2]}', '{user[3]}', '{id}', 'False', '{0}');")
     conn.commit()
 
 
@@ -30,3 +31,23 @@ def prof_show(id):
         return gag
     except:
         return []
+
+
+def find_partner(id):
+    try:
+        conn = sqlite3.connect('bot.db')
+        cur = conn.cursor()
+        cur.execute(f"UPDATE user SET looking_for = 'True' WHERE chat_id = {id};")
+        return True
+    except:
+        return False
+
+
+def stop_chat_partner(id):
+    try:
+        conn = sqlite3.connect('bot.db')
+        cur = conn.cursor()
+        cur.execute(f"UPDATE user SET looking_for = 'False' WHERE chat_id = {id};")
+        return True
+    except:
+        return False

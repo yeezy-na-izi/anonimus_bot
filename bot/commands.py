@@ -74,7 +74,10 @@ def re_find_people_message(message):
 
 @bot.message_handler(regexp='😜 Найти собеседника')
 def find_people_message(message):
-    find_people(message)
+    if find_partner(message.chat.id):
+        find_people(message)
+    else:
+        bot.send_message(message.chat.id, 'У вас нет собоседника', reply_markup=main_keyboard)
 
 
 @bot.message_handler(regexp='⛔ Прекратить диалоги')
@@ -128,7 +131,7 @@ def text_message(message):
                 bog_mes[message.chat.id] = [False, False]
                 bot.send_message(message.chat.id, 'Успешно')
             except:
-                bot.send_message(message.chat.id, 'Сорян, я слишокм слаб чтобы это сделать')
+                bot.send_message(message.chat.id, 'Сорян, я слишком слаб чтобы это сделать')
 
 
 @bot.callback_query_handler(func=lambda call: True)
