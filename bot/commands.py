@@ -69,20 +69,27 @@ def save_profile(message):
 # chat commands
 @bot.message_handler(regexp='😜 Найти нового собеседника')
 def re_find_people_message(message):
-    find_people(message)
+    if find_partner(message.chat.id):
+        find_people(message)
+    else:
+        bot.send_message(message.chat.id, 'У вас еще нет профиля', reply_markup=main_keyboard)
 
 
 @bot.message_handler(regexp='😜 Найти собеседника')
 def find_people_message(message):
     if find_partner(message.chat.id):
         find_people(message)
+        bot.send_message(message.chat.id, conn_partner(), reply_markup=main_keyboard)
     else:
-        bot.send_message(message.chat.id, 'У вас нет собоседника', reply_markup=main_keyboard)
+        bot.send_message(message.chat.id, 'У вас еще нет профиля', reply_markup=main_keyboard)
 
 
 @bot.message_handler(regexp='⛔ Прекратить диалоги')
 def stop_chat(message):
-    bot.send_message(message.chat.id, 'Вы прекратили диалоги', reply_markup=main_keyboard)
+    if stop_chat_partner(message.chat.id):
+        bot.send_message(message.chat.id, 'Вы прекратили диалоги', reply_markup=main_keyboard)
+    else:
+        bot.send_message(message.chat.id, 'Вы не стартовали диалог', reply_markup=main_keyboard)
 
 
 @bot.message_handler(content_types=['text'])

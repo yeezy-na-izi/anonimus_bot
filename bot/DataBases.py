@@ -51,3 +51,14 @@ def stop_chat_partner(id):
         return True
     except:
         return False
+
+
+def conn_partner():
+    try:
+        conn = sqlite3.connect('bot.db')
+        cur = conn.cursor()
+        cur.execute(f"select * from user where looking_for='True'")
+        gag = cur.fetchall()[0]
+        return gag
+    except:
+        return 'Не сложилось...'
